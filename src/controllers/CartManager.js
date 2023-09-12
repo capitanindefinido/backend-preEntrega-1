@@ -26,7 +26,7 @@ class CartManager {
     addCarts = async () => {
         let cartsOld = await this.readCarts()
         let id = nanoid()
-        let cartsConcat = [{id:id, products : {}}, ...cartsOld]
+        let cartsConcat = [{id:id, products : []}, ...cartsOld]
         await this.writeCarts(cartsConcat)
         return "Carrito agregado"
     }
@@ -40,10 +40,12 @@ class CartManager {
     addProductInCart = async (cartId, productId) => {
         let carroId = await this.exist(cartId)
         if(!carroId) return "Carrito no encontrado"
+        console.log(carroId)
         let productById = await productAll.exist(productId)
         if(!productById) return "Producto no encontrado"
         let cartsAll = await this.readCarts()
         let cartFilter = cartsAll.filter((cart) => cart.id != cartId)
+        console.log(carroId.products)
         if(carroId.products.some((prod) => prod.id === productId)){
             let moreProductInCart = carroId.products.find((prod) => prod.id === productId)
             moreProductInCart.cantidad++
